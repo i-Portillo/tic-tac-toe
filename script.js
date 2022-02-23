@@ -35,6 +35,8 @@ const Game = (() => {
                     tiles[index].innerHTML = '<img src="' + xSymbol + '">';
                 } else if (board[index] === 'o') {
                     tiles[index].innerHTML = '<img src="' + circleSymbol + '">';
+                } else {
+                    tiles[index].innerHTML = '';
                 }
             }
         };
@@ -50,12 +52,24 @@ const Game = (() => {
         return {getName, getSymbol};
     };
 
-    const makePlay = (event) => {
+    const takeTurn = (event) => {
         let tile = event.target;
         console.log("Tile pressed: " + tile.dataset.number);
         GameBoard.setTile(tile.dataset.number, activePlayer.getSymbol());
-        tile.removeEventListener('click', makePlay);
-        console.log(checkVictory(GameBoard.getBoard()));
+        tile.removeEventListener('click', takeTurn);
+        if (checkVictory(GameBoard.getBoard())) {
+            GameBoard.getTiles().forEach(tile => {
+                tile.removeEventListener('click', takeTurn);
+            });
+            addScore(activePlayer);
+            updateScore();
+            announceWinner(activePlayer.getName());
+            return;
+        } else if (turn === 8) {
+            announceWinner("tie");
+            return;
+        }
+        turn++;
         togglePlayer();
     };
 
@@ -79,20 +93,80 @@ const Game = (() => {
         });
     };
 
+    const announceWinner = (winner) => {
+        if (winner !== "tie") {
+            winnerDisplayText.textContent = "The winner is " + winner;
+        } else {
+            winnerDisplayText.textContent = "It's a tie!";
+        }
+        winnerDisplay.classList.remove('hidden');
+    };
+
     const togglePlayer = () => {
         activePlayer === players[0] ? 
             activePlayer = players[1]:
             activePlayer = players[0];
+        scoreboard.children[0].classList.toggle('active-player');
+        scoreboard.children[2].classList.toggle('active-player');
+    };
+
+    const addScore = (player) => {
+        player === players[0] ?
+            score[0]++ :
+            score[1]++;
     };
 
     // Game Setup
     const gameSetup = () => {
+        turn = 0;
+        activePlayer = players[round % 2];
+        scoreboard.children[0].classList.remove('active-player');
+        scoreboard.children[2].classList.remove('active-player');
+        round % 2 === 0 ?
+            scoreboard.children[0].classList.add('active-player') :
+            scoreboard.children[2].classList.add('active-player');
+        updateScore();
+        GameBoard.boardCleanup();
         GameBoard.getTiles().forEach(tile => {
-            tile.addEventListener('click', makePlay);
+            tile.addEventListener('click', takeTurn);
         });
     };
 
-    // Array of all the posible winnign combination of tiles
+    const resetGame = () => {
+        score = [0, 0];
+        round = 0;
+        gameSetup();
+    }
+
+    const updateScore = () => {
+        score1.textContent = score[0];
+        score2.textContent = score[1];
+    };
+
+    const winnerDisplay = document.querySelector(".winner-display");
+    const playButton = document.querySelector("header button");
+    playButton.addEventListener('click', () => {
+        gameSetup();
+        playButton.classList.add('hidden');
+        scoreboard.classList.remove('hidden');
+    });
+    const scoreboard = document.querySelector(".scoreboard");
+    const score1 = document.querySelector("#score1");
+    const score2 = document.querySelector("#score2");
+    const startOver = document.querySelector("#startover-btn");
+    startOver.addEventListener('click', () => {
+        resetGame();
+        winnerDisplay.classList.add('hidden');
+    });
+    const nextRound = document.querySelector("#nextround-btn");
+    nextRound.addEventListener('click', () => {
+        round++;
+        gameSetup();
+        winnerDisplay.classList.add('hidden');
+    });
+    const winnerDisplayText = document.querySelector(".winner-display p");
+
+    // Array of all the posible winning combination of tiles
     const winningTiles = [
         [0, 1, 2],
         [0, 3, 6],
@@ -106,11 +180,13 @@ const Game = (() => {
 
     let score = [0, 0];
 
+    let turn = 0;
+    let round = 0;
+
     const players = [Player("Player 1", 'x'), Player("Player 2", 'o')];
 
     let activePlayer = players[0];
-
-    gameSetup();
+    scoreboard.children[0].classList.add('active-player');
 
     return {activePlayer, togglePlayer, players};
     

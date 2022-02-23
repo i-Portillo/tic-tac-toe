@@ -2,13 +2,48 @@ html, body {
     margin: 0;
     padding: 0;
     height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: #d8e2dc;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+header {
+    height: 100px;
+    background-color: #fff;
+    box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.2);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+header div {
+    width: 740px;
+    display: flex;
+    justify-content: center;
+    font-size: 1.1em;
+}
+
+.scoreboard div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.scoreboard div p {
+    margin: 0;
+}
+
+.score {
+    font-size: 1.5em;
 }
 
 .container {
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 100%;
+    flex-grow: 1;
+    padding-top: 30px;
 }
 
 .game-board {
@@ -18,12 +53,69 @@ html, body {
     gap: 10px;
     width: 620px;
     height: 620px;
+    padding: 60px;
+    background-color: #fff;
+    border-radius: 20px;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
 }
 
 .board-tile {
-    background-color: aliceblue;
+    background-color: #d8e2dc;
+    border-radius: 5px;
 }
 
 .board-tile img {
     height: 200px;
+}
+
+.winner-display {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    
+    height: 250px;
+    width: 400px;
+
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: fixed;
+
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
+}
+
+.winner-display p {
+    font-size: 1.2em;
+    font-weight: 600;
+}
+
+button {
+    color: #fff;
+    background-color: #B4C8BC;
+    height: 60px;
+    width: 170px;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    font-size: 1.5em;
+    font-weight: 600;
+}
+
+button:hover {
+    background-color: #90AD9C;
+}
+
+button:active {
+    background-color: #6C927B;
+}
+
+.active-player {
+    font-weight: 900;
+}
+
+.hidden {
+    display: none;
 }

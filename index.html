@@ -8,7 +8,22 @@
 </head>
 <body>
     <header>
-
+        <div>
+            <!-- Play button -->
+            <button>Play</button>
+            <!-- Score display -->
+            <div class="scoreboard hidden">
+                <div>
+                    <p>Player 1</p>
+                    <p class="score" id="score1"></p>
+                </div>
+                <p>vs.</p>
+                <div>
+                    <p>Player 2</p>
+                    <p class="score" id="score2"></p>
+                </div>
+            </div>
+        </div>
     </header>
     <main class="container">
         <div class="game-board">
@@ -23,5 +38,12 @@
             <div class="board-tile" id="tile-8" data-number="8"></div>
         </div>
     </main>
+    <div class="winner-display hidden">
+        <p></p>
+        <div>
+            <button id="startover-btn">Start Over</button>
+            <button id="nextround-btn">Next Round</button>
+        </div>
+    </div>
 </body>
 </html>
